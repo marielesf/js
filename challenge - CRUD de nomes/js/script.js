@@ -1,16 +1,13 @@
-window.addEventListener('load', start);
+let inputName = null;
+let globalNames = [];
+let curentIndex = null;
+let isEditing = false;
 
-var inputName = null;
-var globalNames = [];
-var curentIndex = null;
-var isEditing = false;
-
-function start() {
+window.addEventListener('load', () => {
   inputName = document.querySelector('#inputName');
-
   preventFormSubmit();
   activeInput();
-}
+});
 
 function preventFormSubmit() {
   function handleForm(event) {
@@ -22,7 +19,8 @@ function preventFormSubmit() {
 
 function activeInput() {
   function insertName(newName) {
-    globalNames.push(newName);
+    //fazendo opracao de push com spread
+    globalNames = [...globalNames, newName];
   }
 
   function updateName(newname) {
@@ -45,7 +43,6 @@ function activeInput() {
       clearInput();
     }
   }
-
   inputName.addEventListener('keyup', handleTyping);
   inputName.focus();
 }
@@ -53,7 +50,9 @@ function activeInput() {
 function render() {
   function createDeleteButton(index) {
     function deletename() {
-      globalNames.splice(index, 1);
+      //remover um valor do array com filter - ignorando o primeiro parametro
+      //filter tem como segundo parametro o indice que esta no array - representado por i
+      globalNames = globalNames.filter((_, i) => i !== index);
       render();
     }
     var button = document.createElement('button');
@@ -74,28 +73,28 @@ function render() {
     sapn.textContent = name;
     sapn.title = 'Click to edit';
     sapn.addEventListener('click', editItem);
-
     return sapn;
   }
+
   var divNames = document.querySelector('#names');
   divNames.innerHTML = '';
-
   var ul = document.createElement('ul');
+
   for (var i = 0; i < globalNames.length; i++) {
     var curentName = globalNames[i];
     var li = document.createElement('li');
-
     var button = createDeleteButton(i);
     var span = createSpan(curentName, i);
-
     li.appendChild(button);
     li.appendChild(span);
     ul.appendChild(li);
   }
+
   divNames.appendChild(ul);
 }
 
-function clearInput() {
+//utilizando arrow functions
+const clearInput = () => {
   inputName.value = '';
   inputName.focus();
-}
+};
