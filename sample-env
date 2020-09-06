@@ -1,0 +1,3 @@
+USERDB=user
+PWDDB=senha
+PORT=porta
